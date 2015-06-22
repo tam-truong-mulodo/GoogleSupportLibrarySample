@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/classes-5ea8ff65f84e0b19973db554dc401485ba41d56d.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3/5fc52c41ef0239d1093a1eb7c3697036183677ce/gson-2.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/gson-2.3-39671fc846780375fb344f6c5f8729dc0eff0d20.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/exploded-aar/GoogleSupportLibrarySample.modules/volley/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ad0060c6dda6d9cee4f9894b6939887cb95171ec">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/classes-8d83336ad505ab4fd61cf3a3f9606e711e9f225c.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/classes-83bd2f57a50de64563aac1e448dd7a2931a6753a.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/classes-2d5cb4e3c67a23535811286d462e73c32bf20683.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-d6ecf56fe9406a9a5e01424782a15a18c9af7259.jar" />
+    </item>
+    <item
+        jar="/Users/okadaakihito/Documents/adt-bundle-mac-x86_64-20131030/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/okadaakihito/Documents/workspace/GoogleSupportLibrarySample/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-a88185554a8e38595fc86d2e78f073406985c6fe.jar" />
+    </item>
+
+</items>
