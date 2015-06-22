@@ -9,15 +9,15 @@ import android.view.KeyEvent;
 /**
  * Created by truong.tam on 15/06/18.
  */
-public class splashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // タイトルを非表示にします。
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         // splash.xmlをViewに指定します。
         setContentView(R.layout.splash);
+
+        getSupportActionBar().hide();
 
         Handler hdl = new Handler();
         // 1s遅延させてsplashHandlerを実行します。
@@ -28,10 +28,10 @@ public class splashActivity extends AppCompatActivity {
     class splashHandler implements Runnable {
         public void run() {
             // スプラッシュ完了後に実行するActivityを指定します。
-            Intent intent = new Intent(getApplication(), loginActivity.class);
+            Intent intent = new Intent(getApplication(), LoginActivity.class);
             startActivity(intent);
             // SplashActivityを終了させます。
-            splashActivity.this.finish();
+            SplashActivity.this.finish();
         }
     }
 
@@ -42,7 +42,7 @@ public class splashActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK) {
             // 戻るボタンの処理
-            splashActivity.this.finish();
+            SplashActivity.this.finish();
         }
         return super.onKeyDown(keyCode, event);
     }
