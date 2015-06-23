@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * リクエスト処理
      */
     private void requestLoginApi() {
-        String tag_json_obj = getResources().getString(R.string.json_obj_req);
+        String tagJsonObj = getResources().getString(R.string.json_obj_req);
         String url = getResources().getString(R.string.api_login_url);
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage(getResources().getString(R.string.loading_message));
@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (result) {
                         Intent intent = new Intent(getApplication(), MainActivity.class);
                         startActivity(intent);
+                        finish();
                     }
                 }
             }, new Response.ErrorListener() {
@@ -112,6 +113,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         );
-        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tagJsonObj);
     }
 }
