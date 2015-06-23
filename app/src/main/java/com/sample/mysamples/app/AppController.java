@@ -38,7 +38,6 @@ public class AppController extends Application {
         return mRequestQueue;
     }
 
-
     public <T> void addToRequestQueue(JsonObjectRequest req, String tag) {
         // set the default tag if tag is empty
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);

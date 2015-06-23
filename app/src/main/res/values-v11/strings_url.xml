@@ -1,0 +1,4 @@
+<resources>
+    <string name="api_login_url">http://hana-coffee.xsrv.jp/api/login.json</string>
+    <string name="api_list_url">http://hana-coffee.xsrv.jp/api/list.json</string>
+</resources>
