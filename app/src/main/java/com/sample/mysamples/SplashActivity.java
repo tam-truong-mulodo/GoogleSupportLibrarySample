@@ -26,15 +26,15 @@ public class SplashActivity extends AppCompatActivity {
 
         Handler handler = new Handler();
         // 1s遅延させてsplashHandlerを実行します。
-        handler.postDelayed(new SplashHandler(this), getResources().getInteger(R.integer.splash_time));
+        handler.postDelayed(new SplashRunnable(this), getResources().getInteger(R.integer.splash_time));
 
     }
 
-    private static class SplashHandler implements Runnable {
+    private static class SplashRunnable implements Runnable {
 
         private final WeakReference<SplashActivity> mActivity;
 
-        public SplashHandler(SplashActivity activity) {
+        public SplashRunnable(SplashActivity activity) {
             this.mActivity = new WeakReference<SplashActivity>(activity);
         }
 
@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
                 return;
             }
             if (activity.getRunFlag()) {
-                Intent intent = new Intent(activity, LoginActivity.class);
+                Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
             }
