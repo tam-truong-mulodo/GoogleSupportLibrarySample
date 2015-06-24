@@ -22,9 +22,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.sample.mysamples.app.AppController;
+import com.sample.mysamples.entity.User;
+import com.sample.mysamples.model.UserModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 /**
@@ -38,12 +42,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText pass;
     private Button btnLogin;
 
+    private UserModel mUserModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_use_support_library);
         getSupportActionBar().hide();
+        mUserModel = new UserModel(getApplicationContext());
         findViews(); //viewの読み込み
+
+        List<User> users = mUserModel.findAll();
+        for(User user : users) {
+            Log.d(TAG, user.toString());
+        }
     }
 
     /**
@@ -53,7 +65,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         userId = (EditText) findViewById(R.id.user_id);  //user ID
         pass = (EditText) findViewById(R.id.password);   //password
         btnLogin = (Button) findViewById(R.id.btnLogin); //Login button
-
         // ボタンのイベントリスナーを設定する
         btnLogin.setOnClickListener(this);
     }
@@ -86,10 +97,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, response.toString());
+                    String uid = null;
                     boolean result = false;
                     pDialog.dismiss();
                     try {
                         result = response.getBoolean("response");
+                        uid = response.getString("uid");
+                        User user = new User(uid, userId.getText().toString(), pass.getText().toString(), true);
+                        mUserModel.save(user);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
