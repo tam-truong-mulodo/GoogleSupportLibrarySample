@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,5 +115,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         );
         AppController.getInstance().addToRequestQueue(jsonObjReq, tagJsonObj);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            // 戻るボタンの処理
+            String tagJsonObj = getResources().getString(R.string.json_obj_req);
+            AppController.getInstance().cancelPendingRequests(tagJsonObj);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
