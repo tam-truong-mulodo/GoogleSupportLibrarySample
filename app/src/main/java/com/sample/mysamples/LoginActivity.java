@@ -85,14 +85,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    boolean result = false;
                     Log.d(TAG, response.toString());
+                    boolean result = false;
+                    pDialog.dismiss();
                     try {
                         result = response.getBoolean("response");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    pDialog.hide();
                     if (result) {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     VolleyLog.d(TAG, "Error: " + error.getMessage());
-                    pDialog.hide();
+                    pDialog.dismiss();
                     if (error instanceof NetworkError) {
                     } else if (error instanceof ServerError) {
                     } else if (error instanceof AuthFailureError) {
