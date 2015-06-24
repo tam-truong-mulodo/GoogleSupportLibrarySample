@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.sample.mysamples.R;
 import com.sample.mysamples.app.AppController;
 import com.sample.mysamples.db.DatabaseHelper;
 import com.sample.mysamples.entity.User;
@@ -18,11 +19,11 @@ public class UserModel {
 
     private static final String TAG = UserModel.class.getSimpleName();
     private Context mContext;
-    private Resources mRresources;
+    private Resources mResources;
 
     public UserModel(Context context) {
         this.mContext = context;
-        this.mRresources = AppController.getInstance().getResources();
+        this.mResources = AppController.getInstance().getResources();
     }
 
     /**
@@ -36,7 +37,7 @@ public class UserModel {
             Dao<User, Integer> dao = helper.getDao(User.class);
             dao.createOrUpdate(User);
         } catch (Exception e) {
-            Log.e(TAG, "例外が発生しました", e);
+            Log.e(TAG, mResources.getString(R.string.exception_message), e);
         } finally {
             helper.close();
         }
@@ -54,7 +55,7 @@ public class UserModel {
             Dao<User, Integer> dao = helper.getDao(User.class);
             return dao.delete(User);
         } catch (Exception e) {
-            Log.e(TAG, "例外が発生しました", e);
+            Log.e(TAG, mResources.getString(R.string.exception_message), e);
         } finally {
             helper.close();
         }
@@ -72,7 +73,7 @@ public class UserModel {
             Dao<User, Integer> dao = helper.getDao(User.class);
             return dao.queryForAll();
         } catch (Exception e) {
-            Log.e(TAG, "例外が発生しました", e);
+            Log.e(TAG, mResources.getString(R.string.exception_message), e);
             return null;
         } finally {
             helper.close();
@@ -90,7 +91,7 @@ public class UserModel {
             Dao<User, Integer> dao = helper.getDao(User.class);
             return dao.delete(findAll());
         } catch (Exception e) {
-            Log.e(TAG, "例外が発生しました", e);
+            Log.e(TAG, mResources.getString(R.string.exception_message), e);
         } finally {
             helper.close();
         }
