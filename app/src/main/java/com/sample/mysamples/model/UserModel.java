@@ -1,0 +1,100 @@
+package com.sample.mysamples.model;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
+
+import com.j256.ormlite.dao.Dao;
+import com.sample.mysamples.app.AppController;
+import com.sample.mysamples.db.DatabaseHelper;
+import com.sample.mysamples.entity.User;
+
+import java.util.List;
+
+/**
+ * Created by okadaakihito on 2015/06/24.
+ */
+public class UserModel {
+
+    private static final String TAG = UserModel.class.getSimpleName();
+    private Context mContext;
+    private Resources mRresources;
+
+    public UserModel(Context context) {
+        this.mContext = context;
+        this.mRresources = AppController.getInstance().getResources();
+    }
+
+    /**
+     * insert or updateする
+     *
+     * @param User 対象のエンティティ
+     */
+    public void save(User User) {
+        DatabaseHelper helper = new DatabaseHelper(mContext);
+        try {
+            Dao<User, Integer> dao = helper.getDao(User.class);
+            dao.createOrUpdate(User);
+        } catch (Exception e) {
+            Log.e(TAG, "例外が発生しました", e);
+        } finally {
+            helper.close();
+        }
+    }
+
+    /**
+     * deleteする
+     *
+     * @param User 対象のエンティティ
+     * @return 削除件数
+     */
+    public int delete(User User) {
+        DatabaseHelper helper = new DatabaseHelper(mContext);
+        try {
+            Dao<User, Integer> dao = helper.getDao(User.class);
+            return dao.delete(User);
+        } catch (Exception e) {
+            Log.e(TAG, "例外が発生しました", e);
+        } finally {
+            helper.close();
+        }
+        return 0;
+    }
+
+    /**
+     * 全エンティティを取得する
+     *
+     * @return エンティティのリスト
+     */
+    public List<User> findAll() {
+        DatabaseHelper helper = new DatabaseHelper(mContext);
+        try {
+            Dao<User, Integer> dao = helper.getDao(User.class);
+            return dao.queryForAll();
+        } catch (Exception e) {
+            Log.e(TAG, "例外が発生しました", e);
+            return null;
+        } finally {
+            helper.close();
+        }
+    }
+
+    /**
+     * 全件を削除する
+     *
+     * @return 削除件数
+     */
+    public int deleteAll() {
+        DatabaseHelper helper = new DatabaseHelper(mContext);
+        try {
+            Dao<User, Integer> dao = helper.getDao(User.class);
+            return dao.delete(findAll());
+        } catch (Exception e) {
+            Log.e(TAG, "例外が発生しました", e);
+        } finally {
+            helper.close();
+        }
+        return 0;
+    }
+
+}
