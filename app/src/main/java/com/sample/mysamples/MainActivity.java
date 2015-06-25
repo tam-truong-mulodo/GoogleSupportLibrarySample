@@ -1,26 +1,34 @@
 package com.sample.mysamples;
 
-import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ListView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.sample.mysamples.app.AppController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
  * Created by truong.tam on 15/06/18.
@@ -32,154 +40,122 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
 
+    //ImageLoader
+    private ImageLoader mImageLoader;
+    //ImageLoaderのキャッシュ
+    private ImageCache mCache;
+    //RequestQueueのインスタンス用
+    private RequestQueue mRequestQueue;
+
+    ArrayList<ListData> myList = new ArrayList<ListData>();
+    ListView lvDetail;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.list_view);
+        getSupportActionBar().hide();   //ActionBarを隠す
 
-        //Jsonデータを作成
-        //CreateJsonDataSample();
-
-        //Jsonデータを取得
-        //getJsonData("json");
-        //GetJsonDataSample();
-
-//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.my_recycler_view);
-//        recyclerView.setHasFixedSize(true); // RecyclerViewのサイズを維持し続ける
-////        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-//        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-//        mNavigationView = (NavigationView)findViewById(R.id.navigation);
-//        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(MenuItem menuItem) {
-//                mToolbar.setTitle(menuItem.getTitle());
-//                switch (menuItem.getItemId()) {
-//                    case R.id.action_text_input_layout:
-//                        replaceFragment(new TextInputLayoutFragment());
-//                        mDrawerLayout.closeDrawers();
-//                        return true;
-//                }
-//                return false;
-//            }
-//        });
+        //Listにデータを格納
+        getDataInList();
 
     }
 
     /**
-     * Jsonデータの読み込み
+     * リクエスト処理
      */
-    private void getJsonData(String str) {
+    private void getDataInList() {
 
-        AssetManager assetManager = getResources().getAssets();
-        InputStream inputStream = null;
-        BufferedReader bufferedReader = null;
+        String tag_json_obj = getResources().getString(R.string.json_obj_req);
+        String url = getResources().getString(R.string.api_list_url);
+//        //final NetworkImageView imageView = (NetworkImageView) findViewById(R.id.image);
+//        lvDetail = (ListView) findViewById(R.id.lvCustomList);
 
-        try {
-            inputStream = assetManager.open(str);
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String strData = bufferedReader.readLine();
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // JSONObjectのパース、ListViewへの追加
+                        Log.d(TAG, response.toString());
+                        try {
+                            // Json読み込み
+                            JSONObject jsonObject = new JSONObject(response.toString());
+                            JSONArray jsonArray = jsonObject.getJSONArray("data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonOneRecord = jsonArray.getJSONObject(i);
+                                String index = jsonOneRecord.getString("index");
+                                String message = jsonOneRecord.getString("message");
+                                String url = jsonOneRecord.getString("url");
+                                Log.d(TAG, "index : " + index + ", message : " + message + ", url : " + url);
 
-            // JSONObject に変換します
-            JSONObject json = new JSONObject(strData);
+                                // Create a new object for each list item
+                                ListData ld = new ListData();
+                                ld.setImgUrl(url);
+                                ld.setMessage(message);
 
-            // JSONObject を文字列に変換してログ出力します
-            Log.d(TAG, json.toString());
+                                // Add this object into the ArrayList myList
+                                myList.add(ld);
 
-            inputStream.close();
-            bufferedReader.close();
+                            }
+                            //表示
+                            getView();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        if (error instanceof NetworkError) {
+                            VolleyLog.d(TAG, "Error: NetworkError");
+                        } else if (error instanceof ServerError) {
+                            VolleyLog.d(TAG, "Error: ServerError");
+                        } else if (error instanceof AuthFailureError) {
+                            VolleyLog.d(TAG, "Error: AuthFailureError");
+                        } else if (error instanceof ParseError) {
+                            VolleyLog.d(TAG, "Error: ParseError");
+                        } else if (error instanceof NoConnectionError) {
+                            VolleyLog.d(TAG, "Error: NoConnectionError");
+                        } else if (error instanceof TimeoutError) {
+                            VolleyLog.d(TAG, "Error: TimeoutError");
+                        } else {
+                            VolleyLog.d(TAG, "Error: Other");
+                        }
+                    }
+                }
+        );
+        AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
     /**
-     * Jsonデータの取得
-     * Data: sample
+     * 表示
      */
-    private void GetJsonDataSample() {
-        // ファイルの読み込み
-        InputStream input;
-        try {
-            //input = new FileInputStream(Environment.getExternalStorageDirectory() + "/" +  "sample.json");
-            input = new FileInputStream("/data/" +  "sample.json");
-            int size = input.available();
-            byte[] buffer = new byte[size];
-            input.read(buffer);
-            input.close();
+    private void getView() {
+        Log.d(TAG, "getView()");
+        lvDetail = (ListView) findViewById(R.id.lvCustomList);
 
-            // Json読み込み
-            String json = new String(buffer);
-            JSONObject jsonObject = new JSONObject(json);
+        MyBaseAdapter adapter = new MyBaseAdapter(this, myList);
+        lvDetail.setAdapter(adapter);
+    }
 
-            // データ追加
-            JSONArray jsonArray = jsonObject.getJSONArray("Employee");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonOneRecord = jsonArray.getJSONObject(i);
-                Log.d("TAG", jsonOneRecord.getString("Name"));
-                Log.d("TAG", String.valueOf(jsonOneRecord.getInt("Age")));
+    /*
+  * キャッシュを利用しないためnullにする
+  */
+    private ImageCache getCacheNone(){
+
+        return new ImageCache(){
+            @Override
+            public Bitmap getBitmap(String url) {
+                return null;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Jsonデータの作成
-     * Data: sample
-     */
-    private void CreateJsonDataSample() {
-
-        try {
-            JSONObject jsonObject = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-
-            // jsonデータの作成
-            JSONObject jsonOneData;
-            jsonOneData = new JSONObject();
-            jsonOneData.put("Name", "田中　一郎");
-            jsonOneData.put("Age", 25);
-            jsonArray.put(jsonOneData);
-
-            jsonOneData = new JSONObject();
-            jsonOneData.put("Name", "鈴木　次郎");
-            jsonOneData.put("Age", 30);
-            jsonArray.put(jsonOneData);
-
-            jsonOneData = new JSONObject();
-            jsonOneData.put("Name", "斉藤　三郎");
-            jsonOneData.put("Age", 46);
-            jsonArray.put(jsonOneData);
-
-            jsonOneData = new JSONObject();
-            jsonOneData.put("Name", "高橋　花子");
-            jsonOneData.put("Age", 35);
-            jsonArray.put(jsonOneData);
-
-            jsonObject.put("Employee", jsonArray);
-
-            // jsonファイル出力
-            //File file = new File(Environment.getExternalStorageDirectory() + "/" + "sample.json");
-            File file = new File("/data/" + "sample.json");
-            FileWriter filewriter;
-
-            filewriter = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(filewriter);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.write(jsonObject.toString());
-            pw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void putBitmap(String url, Bitmap bitmap) {
+            }
+        };
     }
 }
