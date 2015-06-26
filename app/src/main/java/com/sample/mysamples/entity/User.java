@@ -12,48 +12,48 @@ public class User {
     private static final String TAG = User.class.getSimpleName();
 
     @DatabaseField(generatedId = true)
-    private Integer mId;
+    private Integer id;
     @DatabaseField
-    private String mUserId;
+    private String userId;
     @DatabaseField
-    private String mMailAddress;
+    private String mailAddress;
     @DatabaseField
-    private String mPassword;
+    private String password;
     @DatabaseField
-    private boolean mLoginFlag;
+    private boolean loginFlag;
 
     public User() {
     }
 
     public User(String userId, String mailAddress, String password, boolean loginFlag) {
-        this.mUserId = userId;
-        this.mMailAddress = mailAddress;
-        this.mPassword = password;
-        this.mLoginFlag = loginFlag;
+        this.userId = userId;
+        this.mailAddress = mailAddress;
+        this.password = password;
+        this.loginFlag = loginFlag;
     }
 
     public User(String userId) {
-        this.mUserId = userId;
+        this.userId = userId;
     }
 
     public Integer getId() {
-        return this.mId;
+        return this.id;
     }
 
     public String getUserId() {
-        return this.mUserId;
+        return this.userId;
     }
 
     public void setUserId(String userId) {
-        this.mUserId = userId;
+        this.userId = userId;
     }
 
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append(" userId : " + mUserId);
-        str.append(" mailAddress : " + mMailAddress);
-        str.append(" password : " + mPassword);
-        str.append(" loginFlag : " + mLoginFlag);
+        str.append(" userId : " + userId);
+        str.append(" mailAddress : " + mailAddress);
+        str.append(" password : " + password);
+        str.append(" loginFlag : " + loginFlag);
 
         return str.toString();
     }

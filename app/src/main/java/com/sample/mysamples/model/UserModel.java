@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.sample.mysamples.R;
 import com.sample.mysamples.app.AppController;
 import com.sample.mysamples.db.DatabaseHelper;
@@ -96,6 +98,30 @@ public class UserModel {
             helper.close();
         }
         return 0;
+    }
+
+    /**
+     * ユーザを検索する
+     *
+     * @return エンティティのリスト
+     */
+    public List<User> findUser(String uid) {
+        DatabaseHelper helper = new DatabaseHelper(mContext);
+        try {
+            Dao<User, Integer> dao = helper.getDao(User.class);
+            QueryBuilder<User, Integer> queryBuilder = dao.queryBuilder();
+
+            PreparedQuery<User> preparedQuery = queryBuilder.where().eq("userId", uid).prepare();
+
+            List<User> list = dao.query(preparedQuery);
+
+            return list;
+        } catch (Exception e) {
+            Log.e(TAG, mResources.getString(R.string.exception_message), e);
+            return null;
+        } finally {
+            helper.close();
+        }
     }
 
 }
