@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
+import com.sample.mysamples.app.AppController;
 
 import java.util.ArrayList;
 
@@ -25,8 +24,7 @@ public class MyBaseAdapter extends BaseAdapter {
     ArrayList<ListData> myList = new ArrayList<ListData>();
     LayoutInflater inflater;
     Context context;
-
-    ImageLoader mImageLoader;
+    ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 
     public MyBaseAdapter(Context context, ArrayList<ListData> object) {
         this.myList = object;
@@ -42,7 +40,7 @@ public class MyBaseAdapter extends BaseAdapter {
 
     @Override
     public ListData getItem(int position) {
-        Log.d(TAG, "getItem: " + myList.get(position));
+        Log.d(TAG, "getItem(position): " + String.valueOf(position));
         return myList.get(position);
     }
 
@@ -55,6 +53,9 @@ public class MyBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         MyViewHolder mViewHolder;
+
+        if (mImageLoader == null)
+            mImageLoader = AppController.getInstance().getImageLoader();
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.list_view_item, parent, false);
@@ -76,14 +77,9 @@ public class MyBaseAdapter extends BaseAdapter {
         ListData currentListData = getItem(position);
 
         mViewHolder.tvMessage.setText(currentListData.getMessage());
-
         String imageUrl = currentListData.getImgUrl();
         Log.d(TAG, "imageUrl: " + imageUrl);
         Log.d(TAG, "Message: " + currentListData.getMessage());
-
-        mImageLoader = new ImageLoader(Volley.newRequestQueue(this.context), new LruCacheSample());
-        ImageListener listener = mImageLoader.getImageListener(mViewHolder.ivImg, 0, 0);
-        mImageLoader.get(imageUrl, listener);
 
         // リクエストのキャンセル処理
         ImageContainer imageContainer = (ImageContainer)mViewHolder.ivImg.getTag();
@@ -92,12 +88,13 @@ public class MyBaseAdapter extends BaseAdapter {
             imageContainer.cancelRequest();
         }
 
+        mViewHolder.ivImg.setImageUrl(imageUrl, mImageLoader);
+
         return convertView;
     }
 
     private class MyViewHolder {
         TextView tvMessage;
-        //ImageView ivImg;
         NetworkImageView ivImg;
     }
 

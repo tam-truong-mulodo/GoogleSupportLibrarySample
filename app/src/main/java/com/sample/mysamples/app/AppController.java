@@ -5,8 +5,10 @@ import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.sample.mysamples.LruBitmapCache;
 
 /**
  * Created by okadaakihito on 2015/06/22.
@@ -17,6 +19,7 @@ public class AppController extends Application {
             .getSimpleName();
 
     private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
 
     private static AppController mInstance;
 
@@ -53,5 +56,14 @@ public class AppController extends Application {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);
         }
+    }
+
+    public ImageLoader getImageLoader() {
+        getRequestQueue();
+        if (mImageLoader == null) {
+            mImageLoader = new ImageLoader(this.mRequestQueue,
+                    new LruBitmapCache());
+        }
+        return this.mImageLoader;
     }
 }
