@@ -1,4 +1,4 @@
-package com.sample.mysamples.db;
+package com.sample.mysamples.model.db;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,8 +9,8 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.sample.mysamples.R;
-import com.sample.mysamples.app.AppController;
-import com.sample.mysamples.entity.User;
+import com.sample.mysamples.model.app.AppController;
+import com.sample.mysamples.model.db.entity.User;
 
 import java.sql.SQLException;
 

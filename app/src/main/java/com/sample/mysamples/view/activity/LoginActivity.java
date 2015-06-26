@@ -1,4 +1,4 @@
-package com.sample.mysamples;
+package com.sample.mysamples.view.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,9 +21,10 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.sample.mysamples.app.AppController;
-import com.sample.mysamples.entity.User;
-import com.sample.mysamples.model.UserModel;
+import com.sample.mysamples.R;
+import com.sample.mysamples.model.app.AppController;
+import com.sample.mysamples.model.db.entity.User;
+import com.sample.mysamples.model.db.model.UserModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;

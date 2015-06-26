@@ -1,4 +1,4 @@
-package com.sample.mysamples.app;
+package com.sample.mysamples.model.app;
 
 import android.app.Application;
 import android.text.TextUtils;
@@ -8,7 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.sample.mysamples.LruBitmapCache;
+import com.sample.mysamples.data.cache.LruBitmapCache;
 
 /**
  * Created by okadaakihito on 2015/06/22.

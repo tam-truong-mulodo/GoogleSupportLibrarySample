@@ -1,4 +1,4 @@
-package com.sample.mysamples.util;
+package com.sample.mysamples.model.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
