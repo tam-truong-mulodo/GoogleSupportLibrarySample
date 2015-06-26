@@ -28,6 +28,7 @@ import com.sample.mysamples.model.UserModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 
@@ -38,11 +39,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private EditText userId;
-    private EditText pass;
-    private Button btnLogin;
+    private EditText mUserId;
+    private EditText mPass;
+    private Button mBtnLogin;
 
     private UserModel mUserModel;
+    private String mUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +55,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViews(); //viewの読み込み
 
         List<User> users = mUserModel.findAll();
-        for(User user : users) {
-            Log.d(TAG, user.toString());
-        }
+        outputLog(users);
     }
 
     /**
      * Viewの読み込み
      */
     private void findViews() {
-        userId = (EditText) findViewById(R.id.user_id);  //user ID
-        pass = (EditText) findViewById(R.id.password);   //password
-        btnLogin = (Button) findViewById(R.id.btnLogin); //Login button
+        mUserId = (EditText) findViewById(R.id.user_id);  //user ID
+        mPass = (EditText) findViewById(R.id.password);   //password
+        mBtnLogin = (Button) findViewById(R.id.btnLogin); //Login button
         // ボタンのイベントリスナーを設定する
-        btnLogin.setOnClickListener(this);
+        mBtnLogin.setOnClickListener(this);
     }
 
     /**
@@ -76,9 +76,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * @param view 押されたボタンのViwe
      */
     public void onClick(View view) {
-        if (view == btnLogin) {
+        if (view == mBtnLogin) {
             //call login api
             requestLoginApi();
+        }
+    }
+
+    private void outputLog(List<User> users) {
+        if (users!=null) {
+            for(User user : users) {
+                Log.d(TAG, user.toString());
+            }
         }
     }
 
@@ -97,17 +105,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, response.toString());
-                    String uid = null;
                     boolean result = false;
                     pDialog.dismiss();
                     try {
                         result = response.getBoolean("response");
-                        uid = response.getString("uid");
-                        User user = new User(uid, userId.getText().toString(), pass.getText().toString(), true);
-                        mUserModel.save(user);
+                        mUid = response.getString("uid");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    List<User> users = mUserModel.findUser(mUid);
+                    if (users.size() > 0) {
+                        //set loginFlag to true
+                    } else {
+                        new Thread(new DbAccessRunnable(LoginActivity.this)).start();
+                    }
+                    outputLog(users);
                     if (result) {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
@@ -130,6 +142,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         );
         AppController.getInstance().addToRequestQueue(jsonObjReq, tagJsonObj);
+    }
+
+    private static class DbAccessRunnable implements Runnable {
+
+        private final WeakReference<LoginActivity> mActivity;
+
+        public DbAccessRunnable(LoginActivity activity) {
+            this.mActivity = new WeakReference<LoginActivity>(activity);
+        }
+
+        @Override
+        public void run() {
+            LoginActivity activity = mActivity.get();
+            if (activity == null) {
+                return;
+            }
+            User addUser = new User(activity.getUid(), activity.getInputUserId(), activity.getInputPass(), true);
+            activity.getUserModel().save(addUser);
+        }
+    }
+
+    private UserModel getUserModel() {
+        return mUserModel;
+    }
+
+    private String getUid() {
+        return mUid;
+    }
+
+    private String getInputUserId() {
+        return mUserId.getText().toString();
+    }
+
+    private String getInputPass() {
+        return mPass.getText().toString();
     }
 
     @Override
