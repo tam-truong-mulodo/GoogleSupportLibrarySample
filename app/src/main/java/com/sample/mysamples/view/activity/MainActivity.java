@@ -1,9 +1,6 @@
-package com.sample.mysamples;
+package com.sample.mysamples.view.activity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
@@ -13,16 +10,15 @@ import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.sample.mysamples.app.AppController;
+import com.sample.mysamples.data.entity.ListData;
+import com.sample.mysamples.view.adapter.MyBaseAdapter;
+import com.sample.mysamples.R;
+import com.sample.mysamples.model.app.AppController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,29 +32,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-
-    //ImageLoader
-    private ImageLoader mImageLoader;
-    //ImageLoaderのキャッシュ
-    private ImageCache mCache;
-    //RequestQueueのインスタンス用
-    private RequestQueue mRequestQueue;
-
-    ArrayList<ListData> myList = new ArrayList<ListData>();
-    ListView lvDetail;
+    private ArrayList<ListData> myList = new ArrayList<ListData>();
+    private ListView mlvDetail;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
         setContentView(R.layout.list_view);
         getSupportActionBar().hide();   //ActionBarを隠す
 
-        //Listにデータを格納
+        //Listにデータを格納し、画面に表示する
         getDataInList();
 
     }
@@ -70,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         String tag_json_obj = getResources().getString(R.string.json_obj_req);
         String url = getResources().getString(R.string.api_list_url);
-//        //final NetworkImageView imageView = (NetworkImageView) findViewById(R.id.image);
-//        lvDetail = (ListView) findViewById(R.id.lvCustomList);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -110,21 +92,21 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, "Error: " + error.getMessage());
+                        Log.d(TAG, "Error: " + error.getMessage());
                         if (error instanceof NetworkError) {
-                            VolleyLog.d(TAG, "Error: NetworkError");
+                            Log.d(TAG, "Error: NetworkError");
                         } else if (error instanceof ServerError) {
-                            VolleyLog.d(TAG, "Error: ServerError");
+                            Log.d(TAG, "Error: ServerError");
                         } else if (error instanceof AuthFailureError) {
-                            VolleyLog.d(TAG, "Error: AuthFailureError");
+                            Log.d(TAG, "Error: AuthFailureError");
                         } else if (error instanceof ParseError) {
-                            VolleyLog.d(TAG, "Error: ParseError");
+                            Log.d(TAG, "Error: ParseError");
                         } else if (error instanceof NoConnectionError) {
-                            VolleyLog.d(TAG, "Error: NoConnectionError");
+                            Log.d(TAG, "Error: NoConnectionError");
                         } else if (error instanceof TimeoutError) {
-                            VolleyLog.d(TAG, "Error: TimeoutError");
+                            Log.d(TAG, "Error: TimeoutError");
                         } else {
-                            VolleyLog.d(TAG, "Error: Other");
+                            Log.d(TAG, "Error: Other");
                         }
                     }
                 }
@@ -137,25 +119,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getView() {
         Log.d(TAG, "getView()");
-        lvDetail = (ListView) findViewById(R.id.lvCustomList);
+        mlvDetail = (ListView) findViewById(R.id.lvCustomList);
 
         MyBaseAdapter adapter = new MyBaseAdapter(this, myList);
-        lvDetail.setAdapter(adapter);
-    }
-
-    /*
-  * キャッシュを利用しないためnullにする
-  */
-    private ImageCache getCacheNone(){
-
-        return new ImageCache(){
-            @Override
-            public Bitmap getBitmap(String url) {
-                return null;
-            }
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-            }
-        };
+        mlvDetail.setAdapter(adapter);
     }
 }

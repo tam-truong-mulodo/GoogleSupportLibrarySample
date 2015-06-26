@@ -1,4 +1,4 @@
-package com.sample.mysamples;
+package com.sample.mysamples.data.cache;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;

@@ -1,10 +1,12 @@
-package com.sample.mysamples;
+package com.sample.mysamples.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+
+import com.sample.mysamples.R;
 
 import java.lang.ref.WeakReference;
 

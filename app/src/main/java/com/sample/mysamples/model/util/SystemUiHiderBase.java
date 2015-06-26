@@ -1,4 +1,4 @@
-package com.sample.mysamples.util;
+package com.sample.mysamples.model.util;
 
 import android.app.Activity;
 import android.view.View;

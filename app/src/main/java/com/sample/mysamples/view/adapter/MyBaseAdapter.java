@@ -1,4 +1,4 @@
-package com.sample.mysamples;
+package com.sample.mysamples.view.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
 import com.android.volley.toolbox.NetworkImageView;
-import com.sample.mysamples.app.AppController;
+import com.sample.mysamples.R;
+import com.sample.mysamples.data.entity.ListData;
+import com.sample.mysamples.model.app.AppController;
 
 import java.util.ArrayList;
 
@@ -21,27 +23,27 @@ import java.util.ArrayList;
 public class MyBaseAdapter extends BaseAdapter {
     private static final String TAG = "MyAdapter";
 
-    ArrayList<ListData> myList = new ArrayList<ListData>();
-    LayoutInflater inflater;
-    Context context;
-    ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+    private ArrayList<ListData> mMyList = new ArrayList<ListData>();
+    private LayoutInflater mInflater;
+    private Context mContext;
+    private ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 
     public MyBaseAdapter(Context context, ArrayList<ListData> object) {
-        this.myList = object;
-        this.context = context;
-        inflater = LayoutInflater.from(this.context);
+        this.mMyList = object;
+        this.mContext = context;
+        mInflater = LayoutInflater.from(this.mContext);
     }
 
     @Override
     public int getCount() {
-        Log.d(TAG, "getCount: " + myList.size());
-        return myList.size();
+        Log.d(TAG, "getCount: " + mMyList.size());
+        return mMyList.size();
     }
 
     @Override
     public ListData getItem(int position) {
         Log.d(TAG, "getItem(position): " + String.valueOf(position));
-        return myList.get(position);
+        return mMyList.get(position);
     }
 
     @Override
@@ -54,11 +56,10 @@ public class MyBaseAdapter extends BaseAdapter {
 
         MyViewHolder mViewHolder;
 
-        if (mImageLoader == null)
-            mImageLoader = AppController.getInstance().getImageLoader();
+        if (mImageLoader == null) mImageLoader = AppController.getInstance().getImageLoader();
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_view_item, parent, false);
+            convertView = mInflater.inflate(R.layout.list_view_item, parent, false);
 
             NetworkImageView imageView = (NetworkImageView)convertView.findViewById(R.id.image);
             TextView textView = (TextView)convertView.findViewById(R.id.message);
@@ -93,7 +94,7 @@ public class MyBaseAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class MyViewHolder {
+    public static class MyViewHolder {
         TextView tvMessage;
         NetworkImageView ivImg;
     }

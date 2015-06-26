@@ -2,25 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sample.mysamples" >
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name="com.sample.mysamples.app.AppController"
+        android:name=".model.app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.activity.SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" android:label="MainActivity"/>
-        <activity android:name=".LoginActivity" android:label="Login"/>
+        <activity android:name=".view.activity.MainActivity" android:label="MainActivity"/>
+        <activity android:name=".view.activity.LoginActivity" android:label="Login"/>
     </application>
 
 </manifest>

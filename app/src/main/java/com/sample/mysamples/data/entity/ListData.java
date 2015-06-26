@@ -1,4 +1,4 @@
-package com.sample.mysamples;
+package com.sample.mysamples.data.entity;
 
 /**
  * Created by truong.tam on 15/06/24.

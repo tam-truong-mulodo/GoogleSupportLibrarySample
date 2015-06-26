@@ -1,4 +1,4 @@
-package com.sample.mysamples.model;
+package com.sample.mysamples.model.db.model;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,9 +8,9 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.sample.mysamples.R;
-import com.sample.mysamples.app.AppController;
-import com.sample.mysamples.db.DatabaseHelper;
-import com.sample.mysamples.entity.User;
+import com.sample.mysamples.model.app.AppController;
+import com.sample.mysamples.model.db.DatabaseHelper;
+import com.sample.mysamples.model.db.entity.User;
 
 import java.util.List;
 
